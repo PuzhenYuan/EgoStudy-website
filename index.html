@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Anonymous Authors">
+<meta name="description" content="A controlled study of how scaling egocentric human demonstrations affects VLA and WAM pretraining for dexterous robot control.">
+<title>EgoStudy | How Does Scaling Egocentric Data Affect VLA and WAM Pretraining?</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="top">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar"><nav class="bar" aria-label="Main navigation">
+<a class="brand" href="#top"><i class="mark" aria-hidden="true"></i>EgoStudy</a>
+<div class="navlinks"><a href="#abstract">Abstract</a><a href="#design">Study design</a><a href="#experiments">Experiments</a><a href="#results">Results</a></div>
+</nav></header>
+<main id="main">
+<div class="hero">
+<h1><span class="project-name">EgoStudy</span><span class="paper-title">How Does Scaling Egocentric Data Affect VLA and WAM Pretraining?</span></h1>
+<p class="authors">Anonymous Authors</p>
+<div class="actions"><a class="button" href="assets/supplementary-material.pdf" target="_blank" rel="noopener"><span class="document-icon" aria-hidden="true"></span>Supplementary Material</a>
+<button type="button" class="button pending" disabled><span aria-hidden="true" class="code-icon">&lt;/&gt;</span>Code <span class="status">comming soon</span></button></div>
+</div>
+<div class="teaser wrap"><figure class="plate plate-1">
+  <a class="figure-link" href="assets/figures/overview.png" target="_blank" rel="noopener" aria-label="Open Figure 1 at full size">
+    <img src="assets/figures/overview.png" width="2361" height="1276" alt="Study overview linking human and robot demonstrations to the scaling curves and the three research questions." fetchpriority="high">
+  </a>
+  <figcaption><b>Figure 1.</b> Overview of EgoStudy. We conduct a controlled study by scaling egocentric human data while keeping robot training exposure fixed (top left). Increasing human data reduces wrist translation error for both VLAs and WAMs (top right). The bottom panels show how scaling behavior varies with pretraining choices, across action components, and between VLAs and WAMs.</figcaption>
+</figure></div>
+<section id="abstract" class="abstract section"><div class="reading"><h2>Abstract</h2><p>Egocentric human manipulation data offer a scalable resource for training dexterous robot policies. However, how effectively robots can learn and benefit from these data remains unclear due to the embodiment gap between humans and robots. We present EgoStudy, a systematic, controlled study of egocentric data for robot learning. Holding the robot dataset fixed, we vary the scale and diversity of egocentric data, data processing strategies, and co-training configurations. We investigate three questions: (1) Which data processing and pretraining choices most effectively exploit egocentric data? (2) Which components of robot action prediction benefit most from scaling these data? (3) How do scaling effects differ between vision-language-action models (VLAs) and world-action models (WAMs)?</p><p>Our experiments yield three main findings. First, data diversity, alignment between trajectories and detailed language annotations are key factors in effective transfer. Second, scaling egocentric data yields larger gains in predicting end-effector translation than in predicting fine-grained finger movements. Third, WAMs perform better when egocentric data are limited, whereas VLAs exhibit greater gains as the amount of egocentric data increases. Together, these findings provide practical guidance on processing and using egocentric data to train VLAs and WAMs, while clarifying the benefits and limitations of scaling these data.</p></div></section>
+<section id="design" class="design section"><div class="wrap"><h2>Study Design</h2>
+<p class="lede">How can we isolate what a robot learns from human demonstrations? We vary the human data while keeping the robot training pool, expected robot exposure, and optimization budget fixed.</p>
+<div class="design-grid"><div><h3>A shared action space</h3><p>The VLA pairs Qwen3-VL-4B with a GR00T-style action expert. The WAM pairs a Wan2.1 14B video backbone with an action diffusion transformer. Both predict 32-step chunks in the same 108-dimensional action space. Each hand contributes a wrist pose and five fingertip poses.</p><figure class="plate plate-2">
+  <a class="figure-link" href="assets/figures/action-space.png" target="_blank" rel="noopener" aria-label="Open Figure 2 at full size">
+    <img src="assets/figures/action-space.png" width="1192" height="702" alt="Human hands and two robot embodiments annotated with wrist and fingertip coordinate axes." loading="lazy">
+  </a>
+  <figcaption><b>Figure 2.</b> Red points and arrows indicate positions and orientations (omitting 2 axes for clarity), respectively, in shared dexterous action space and different embodiments.</figcaption>
+</figure></div>
+<div><h3>A controlled data mixture</h3><p>The human pool is curated from about 18,000 hours of raw video. We train with 1%, 3%, 10%, 30%, and 100% of each human source. At every scale, 75% of samples come from human demonstrations, 20% from Bimanual XHand, and 5% from RoboCasa-GR1.</p><figure class="plate plate-3">
+  <a class="figure-link" href="assets/figures/sampling.png" target="_blank" rel="noopener" aria-label="Open Figure 3 at full size">
+    <img src="assets/figures/sampling.png" width="1136" height="821" alt="Training sample mixture showing seven egocentric sources and two fixed robot sources." loading="lazy">
+  </a>
+  <figcaption><b>Figure 3.</b> Pretraining samples allocation. Egocentric datasets receive 75% of samples, with probabilities proportional to the square root of their filtered durations. VITRA aggregates three subsets. The sampling probabilities of Bimanual XHand (20%) and RoboCasa-GR1 (5%) are fixed across experiments.</figcaption>
+</figure></div></div>
+<div class="protocol"><h3>Evaluation</h3><p>On held-out robot episodes, we report masked mean squared error separately for wrist translation, wrist rotation, and fingertip pose, averaged over three training seeds. In RoboCasa-GR1, we also measure closed-loop task success after matched robot posttraining.</p></div>
+</div></section>
+<section id="experiments" class="section experiments"><div class="wrap"><h2>Experiments</h2>
+<div class="experiment-layout"><nav class="toc" aria-label="Experimental questions"><a href="#scaling"><span>Fig. 4</span>Data scale</a><a href="#data-choices"><span>Fig. 5</span>Data choices</a><a href="#robot-control"><span>Fig. 6</span>Robot control</a><a href="#action-components"><span>Fig. 7</span>Action components</a><a href="#feature-alignment"><span>Fig. 8</span>Visual features</a><a href="#backbones"><span>Fig. 9</span>Backbone choice</a></nav><div class="articles"><article id="scaling" class="experiment">
+ <h3>Does scaling egocentric data improve robot learning?</h3>
+ <p class="setup">For each model, we expand the eligible human training pool from 1% to 100% and measure wrist translation error on held-out robot episodes.</p>
+ <figure class="plate plate-4">
+  <a class="figure-link" href="assets/figures/scaling.png" target="_blank" rel="noopener" aria-label="Open Figure 4 at full size">
+    <img src="assets/figures/scaling.png" width="2478" height="760" alt="Wrist translation error for VLA and WAM falls across five egocentric data fractions on two robot holdouts." loading="lazy">
+  </a>
+  <figcaption><b>Figure 4.</b> Does scaling egocentric data improve robot learning? We pretrain the VLA (left) and WAM (right) with 1%, 3%, 10%, 30%, and 100% of the egocentric human data while keeping robot training exposure and the optimization budget fixed. We evaluate wrist translation MSE on held-out trajectories from Bimanual XHand and RoboCasa-GR1. All four model–domain pairs show a consistent downward trend, indicating effective human-to-robot transfer in EgoStudy.</figcaption>
+</figure>
+ <div class="finding"><h4>Conclusion</h4><p>On Bimanual XHand, wrist translation error falls by <strong>20.2% for the VLA</strong> and <strong>18.8% for the WAM</strong>. The corresponding reductions on RoboCasa-GR1 are 14.6% and 9.6%. The VLA gains more with scale, while the WAM generally reaches lower error.</p></div>
+ </article>
+<article id="data-choices" class="experiment">
+ <h3>Which data processing and co-training choices improve transfer?</h3>
+ <p class="setup">Four comparisons examine how clips are segmented, what their captions describe, which sources enter the mixture, and how action targets are spaced in time.</p>
+ <figure class="plate plate-5">
+  <a class="figure-link" href="assets/figures/data-choices.png" target="_blank" rel="noopener" aria-label="Open Figure 5 at full size">
+    <img src="assets/figures/data-choices.png" width="2442" height="1171" alt="Four groups of bar charts comparing clip curation, caption detail, source diversity and temporal sampling." loading="lazy">
+  </a>
+  <figcaption><b>Figure 5.</b> Which data processing and co-training designs improve transfer? Complete episodes, detailed captions, and the dataset diversity yield lower wrist translation error on both robot holdouts for both model families. This indicates that data diversity and alignment between trajectories and detailed language annotations are key factors in effective transfer. Moreover, fixed-step sampling yields lower error for the VLA, and event-level sampling yields lower error for the WAM.</figcaption>
+</figure>
+ <div class="finding"><h4>Conclusion</h4><p>Clips that contain a complete action and captions that describe it in detail reduce wrist error on both holdouts. The mixed-source condition also outperforms the EgoDex comparison, although the paper notes that robot supervision contributes to this comparison. <strong>Fixed-step sampling works better for the VLA, and event-level sampling works better for the WAM.</strong></p></div>
+ </article>
+<article id="robot-control" class="experiment">
+ <h3>Do pretraining gains carry over to robot control?</h3>
+ <p class="setup">We posttrain each policy on the official RoboCasa-GR1 dataset under the same protocol and run ten trials per task, for 240 trials per evaluation.</p>
+ <figure class="plate plate-6">
+  <a class="figure-link" href="assets/figures/robot-control.png" target="_blank" rel="noopener" aria-label="Open Figure 6 at full size">
+    <img src="assets/figures/robot-control.png" width="1183" height="671" alt="RoboCasa-GR1 rollout success for VLA and WAM at 1%, 10% and 100% of the egocentric data." loading="lazy">
+  </a>
+  <figcaption><b>Figure 6.</b> Do pretraining gains carry over to robot control? RoboCasa-GR1 task success increases after posttraining for both model families, consistent with the decrease in pretraining validation loss. Gray dashed lines mark the corresponding baselines without pretraining.</figcaption>
+</figure>
+ <div class="finding"><h4>Conclusion</h4><p>From 1% to 100% egocentric data, RoboCasa-GR1 success rises from <strong>38.3% to 43.8% for the VLA</strong> and from <strong>39.6% to 45.4% for the WAM</strong>. At all three evaluated scales, lower validation error accompanies higher rollout success.</p></div>
+ </article>
+<article id="action-components" class="experiment">
+ <h3>Which robot motions benefit most from more human data?</h3>
+ <p class="setup">Separating the motion of the wrist from the pose of each fingertip reveals where the aggregate change in prediction error comes from.</p>
+ <figure class="plate plate-7">
+  <a class="figure-link" href="assets/figures/action-components.png" target="_blank" rel="noopener" aria-label="Open Figure 7 at full size">
+    <img src="assets/figures/action-components.png" width="2468" height="936" alt="Six plots separating wrist translation, wrist rotation and fingertip pose errors for VLA and WAM." loading="lazy">
+  </a>
+  <figcaption><b>Figure 7.</b> Which action components benefit most from scaling egocentric data? We measure mean squared error (MSE) separately for wrist translation, wrist rotation, and fingertip pose on high-quality, held-out robot trajectories. Across both robot domains and model families, wrist translation MSE generally decreases as egocentric data scale, while wrist rotation and fingertip pose errors show no consistent decline. We hypothesize that due to human–robot embodiment gap and errors in estimating actions limit transfer primarily to large-scale motions such as wrist translation, with less benefit for the finger movements and wrist rotations.</figcaption>
+</figure>
+ <div class="finding"><h4>Conclusion</h4><p><strong>Wrist translation shows the clearest gain.</strong> Wrist rotation and fingertip pose show no consistent improvement across models and domains. The authors suggest that tracking errors and differences in hand–object contact may limit transfer for fine movements.</p></div>
+ </article>
+<article id="feature-alignment" class="experiment">
+ <h3>Do human and robot visual features become more alike?</h3>
+ <p class="setup">Relative separation measures the distance between the mean human and robot features, normalized by their spread within each domain. A smaller value indicates closer feature distributions.</p>
+ <figure class="plate plate-8">
+  <a class="figure-link" href="assets/figures/feature-alignment.png" target="_blank" rel="noopener" aria-label="Open Figure 8 at full size">
+    <img src="assets/figures/feature-alignment.png" width="2461" height="503" alt="Relative human–robot feature separation for the final VLA layer and four WAM layers." loading="lazy">
+  </a>
+  <figcaption><b>Figure 8.</b> How do VLA and WAM visual features change with scale? As egocentric data scale, relative separation R between human and robot features decreases in both robot domains for the VLA but shows no consistent decrease across the WAM layers examined. We hypothesize that human and robot features align more closely in our VLA because it only needs to output actions in a shared action space. Our WAM must also predict future video, which may encourage it to retain visual differences between human and robot hands.</figcaption>
+</figure>
+ <div class="finding"><h4>Conclusion</h4><p>Human and robot features draw closer in the <strong>final VLA layer</strong> on both robot datasets. The four WAM layers show no consistent decrease. One possible explanation is that predicting future frames rewards the WAM for retaining differences in how human and robot hands look.</p></div>
+ </article>
+<article id="backbones" class="experiment">
+ <h3>How does backbone choice affect scaling gains?</h3>
+ <p class="setup">We compare two Qwen3-VL backbones for the VLA and two Wan video backbones for the WAM, tracking wrist translation error as human data increases.</p>
+ <figure class="plate plate-9">
+  <a class="figure-link" href="assets/figures/backbones.png" target="_blank" rel="noopener" aria-label="Open Figure 9 at full size">
+    <img src="assets/figures/backbones.png" width="2477" height="502" alt="Four wrist translation error plots comparing Qwen3-VL 4B and 8B with Wan2.1 14B and Wan2.2 5B." loading="lazy">
+  </a>
+  <figcaption><b>Figure 9.</b> How does backbone choice affect scaling gains between VLA and WAM? The wrist translation error decreases to the same extent across different VLAs, indicating that the 4B backbone is already capable of effectively extracting features shared between the egocentric and robot data. When the backbone of WAM is changed to 5B, its human-to-robot capability declines indicating that WAM relies more heavily on a powerful video backbone to assimilate egocentric data.</figcaption>
+</figure>
+ <div class="finding"><h4>Conclusion</h4><p>The <strong>4B and 8B Qwen3-VL backbones</strong> gain similarly from more human data. The Wan2.1 14B WAM gains more than the Wan2.2 5B variant. In these configurations, transfer is more sensitive to the choice of video backbone.</p></div>
+ </article></div></div>
+</div></section>
+<section class="results section" id="results"><div class="reading"><h2>Results</h2>
+<p class="lede">Scaling human demonstrations helps both model families predict where the robot wrist will move. The improvement also carries over to task success after robot posttraining.</p>
+<table><caption>RoboCasa-GR1 task success by egocentric pretraining fraction</caption>
+<thead><tr><th scope="col">Model</th><th scope="col">1%</th><th scope="col">10%</th><th scope="col">100%</th><th scope="col">Gain</th></tr></thead>
+<tbody><tr><th scope="row">VLA</th><td>38.3%</td><td>39.2%</td><td>43.8%</td><td>+5.5 pp</td></tr>
+<tr><th scope="row">WAM</th><td>39.6%</td><td>43.3%</td><td>45.4%</td><td>+5.8 pp</td></tr></tbody></table>
+<p class="note">Gain is the change in percentage points from 1% to 100% of the human pool. <a href="#robot-control">See Figure 6 ↗</a></p>
+<p>The WAM achieves higher rollout success at each measured scale. The VLA shows larger relative reductions in wrist translation error. Across both model families, complete action clips and detailed captions support transfer, while wrist rotation and fingertip pose remain harder to improve by adding human data alone.</p>
+</div></section>
+</main><footer class="wrap"><span>EgoStudy</span><a href="#top">Back to top ↑</a></footer>
+</body></html>
