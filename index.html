@@ -45,7 +45,7 @@
 <div class="protocol"><h3>Evaluation</h3><p>On held-out robot episodes, we report masked mean squared error separately for wrist translation, wrist rotation, and fingertip pose, averaged over three training seeds. In RoboCasa-GR1, we also measure closed-loop task success after matched robot posttraining.</p></div>
 </div></section>
 <section id="experiments" class="section experiments"><div class="wrap"><h2>Experiments</h2>
-<div class="experiment-layout"><nav class="toc" aria-label="Experimental questions"><a href="#scaling"><span>Fig. 4</span>Data scale</a><a href="#data-choices"><span>Fig. 5</span>Data choices</a><a href="#robot-control"><span>Fig. 6</span>Robot control</a><a href="#action-components"><span>Fig. 7</span>Action components</a><a href="#feature-alignment"><span>Fig. 8</span>Visual features</a><a href="#backbones"><span>Fig. 9</span>Backbone choice</a></nav><div class="articles"><article id="scaling" class="experiment">
+<div class="experiment-layout"><nav class="toc" aria-label="Experimental questions"><a href="#scaling"><span>Fig. 4</span>Data scale</a><a href="#robot-control"><span>Fig. 6</span>Robot control</a><a href="#data-choices"><span>Fig. 5</span>pretrain choises</a><a href="#action-components"><span>Fig. 7</span>Action components</a><a href="#feature-alignment"><span>Fig. 8</span>Visual features</a><a href="#backbones"><span>Fig. 9</span>Backbone choice</a></nav><div class="articles"><article id="scaling" class="experiment">
  <h3>Does scaling egocentric data improve robot learning?</h3>
  <p class="setup">For each model, we expand the eligible human training pool from 1% to 100% and measure wrist translation error on held-out robot episodes.</p>
  <figure class="plate plate-4">
@@ -55,17 +55,6 @@
   <figcaption><b>Figure 4.</b> Does scaling egocentric data improve robot learning? We pretrain the VLA (left) and WAM (right) with 1%, 3%, 10%, 30%, and 100% of the egocentric human data while keeping robot training exposure and the optimization budget fixed. We evaluate wrist translation MSE on held-out trajectories from Bimanual XHand and RoboCasa-GR1. All four model–domain pairs show a consistent downward trend, indicating effective human-to-robot transfer in EgoStudy.</figcaption>
 </figure>
  <div class="finding"><h4>Conclusion</h4><p>On Bimanual XHand, wrist translation error falls by <strong>20.2% for the VLA</strong> and <strong>18.8% for the WAM</strong>. The corresponding reductions on RoboCasa-GR1 are 14.6% and 9.6%. The VLA gains more with scale, while the WAM generally reaches lower error.</p></div>
- </article>
-<article id="data-choices" class="experiment">
- <h3>Which data processing and co-training choices improve transfer?</h3>
- <p class="setup">Four comparisons examine how clips are segmented, what their captions describe, which sources enter the mixture, and how action targets are spaced in time.</p>
- <figure class="plate plate-5">
-  <a class="figure-link" href="assets/figures/data-choices.png" target="_blank" rel="noopener" aria-label="Open Figure 5 at full size">
-    <img src="assets/figures/data-choices.png" width="2442" height="1171" alt="Four groups of bar charts comparing clip curation, caption detail, source diversity and temporal sampling." loading="lazy">
-  </a>
-  <figcaption><b>Figure 5.</b> Which data processing and co-training designs improve transfer? Complete episodes, detailed captions, and the dataset diversity yield lower wrist translation error on both robot holdouts for both model families. This indicates that data diversity and alignment between trajectories and detailed language annotations are key factors in effective transfer. Moreover, fixed-step sampling yields lower error for the VLA, and event-level sampling yields lower error for the WAM.</figcaption>
-</figure>
- <div class="finding"><h4>Conclusion</h4><p>Clips that contain a complete action and captions that describe it in detail reduce wrist error on both holdouts. The mixed-source condition also outperforms the EgoDex comparison, although the paper notes that robot supervision contributes to this comparison. <strong>Fixed-step sampling works better for the VLA, and event-level sampling works better for the WAM.</strong></p></div>
  </article>
 <article id="robot-control" class="experiment">
  <h3>Do pretraining gains carry over to robot control?</h3>
@@ -77,6 +66,17 @@
   <figcaption><b>Figure 6.</b> Do pretraining gains carry over to robot control? RoboCasa-GR1 task success increases after posttraining for both model families, consistent with the decrease in pretraining validation loss. Gray dashed lines mark the corresponding baselines without pretraining.</figcaption>
 </figure>
  <div class="finding"><h4>Conclusion</h4><p>From 1% to 100% egocentric data, RoboCasa-GR1 success rises from <strong>38.3% to 43.8% for the VLA</strong> and from <strong>39.6% to 45.4% for the WAM</strong>. At all three evaluated scales, lower validation error accompanies higher rollout success.</p></div>
+ </article>
+<article id="data-choices" class="experiment">
+ <h3>Which data processing and co-training choices improve transfer?</h3>
+ <p class="setup">Four comparisons examine how clips are segmented, what their captions describe, which sources enter the mixture, and how action targets are spaced in time.</p>
+ <figure class="plate plate-5">
+  <a class="figure-link" href="assets/figures/data-choices.png" target="_blank" rel="noopener" aria-label="Open Figure 5 at full size">
+    <img src="assets/figures/data-choices.png" width="2442" height="1171" alt="Four groups of bar charts comparing clip curation, caption detail, source diversity and temporal sampling." loading="lazy">
+  </a>
+  <figcaption><b>Figure 5.</b> Which data processing and co-training designs improve transfer? Complete episodes, detailed captions, and the dataset diversity yield lower wrist translation error on both robot holdouts for both model families. This indicates that data diversity and alignment between trajectories and detailed language annotations are key factors in effective transfer. Moreover, fixed-step sampling yields lower error for the VLA, and event-level sampling yields lower error for the WAM.</figcaption>
+</figure>
+ <div class="finding"><h4>Conclusion</h4><p>Clips that contain a complete action and captions that describe it in detail reduce wrist error on both holdouts. The mixed-source condition also outperforms the EgoDex comparison, although the paper notes that robot supervision contributes to this comparison. <strong>Fixed-step sampling works better for the VLA, and event-level sampling works better for the WAM.</strong></p></div>
  </article>
 <article id="action-components" class="experiment">
  <h3>Which robot motions benefit most from more human data?</h3>
@@ -113,13 +113,9 @@
  </article></div></div>
 </div></section>
 <section class="results section" id="results"><div class="reading"><h2>Results</h2>
-<p class="lede">Scaling human demonstrations helps both model families predict where the robot wrist will move. The improvement also carries over to task success after robot posttraining.</p>
-<table><caption>RoboCasa-GR1 task success by egocentric pretraining fraction</caption>
-<thead><tr><th scope="col">Model</th><th scope="col">1%</th><th scope="col">10%</th><th scope="col">100%</th><th scope="col">Gain</th></tr></thead>
-<tbody><tr><th scope="row">VLA</th><td>38.3%</td><td>39.2%</td><td>43.8%</td><td>+5.5 pp</td></tr>
-<tr><th scope="row">WAM</th><td>39.6%</td><td>43.3%</td><td>45.4%</td><td>+5.8 pp</td></tr></tbody></table>
-<p class="note">Gain is the change in percentage points from 1% to 100% of the human pool. <a href="#robot-control">See Figure 6 ↗</a></p>
-<p>The WAM achieves higher rollout success at each measured scale. The VLA shows larger relative reductions in wrist translation error. Across both model families, complete action clips and detailed captions support transfer, while wrist rotation and fingertip pose remain harder to improve by adding human data alone.</p>
+<p>EgoStudy brings egocentric human and bimanual robot demonstrations into a shared dexterous action space for controlled VLA and WAM pretraining and evaluation, enabling effective human-to-robot transfer. We conduct comprehensive experiments of data scale, semantic completeness, caption detail, source diversity, temporal sampling, action components and backbone capability, identifying how these choices affect robot foundation model pretraining.</p>
+<p>First, data diversity, alignment between trajectories and detailed language annotations are key factors in effective transfer. Second, scaling egocentric data yields larger gains in predicting end-effector translation than in predicting fine-grained finger movements. Third, WAMs perform better when egocentric data are limited, whereas VLAs exhibit greater gains as the amount of egocentric data increases.</p>
+<p>Experiments involving visual features and backbone variations indicate that the scaling of VLA may stem from the modeling of shared actions, whereas the scaling of WAM may depend on the video backbone’s capacity to assimilate egocentric video data—with actions merely being extracted from the video prediction. Together, these findings reveal the capability gains and limitations of scaling egocentric data.</p>
 </div></section>
 </main><footer class="wrap"><span>EgoStudy</span><a href="#top">Back to top ↑</a></footer>
 </body></html>
