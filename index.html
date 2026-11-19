@@ -84,7 +84,7 @@
   </a>
   <figcaption><b>Figure 5.</b> Which data processing and co-training designs improve transfer? Complete episodes, detailed captions, and the dataset diversity yield lower wrist translation error on both robot holdouts for both model families. This indicates that data diversity and alignment between trajectories and detailed language annotations are key factors in effective transfer. Moreover, fixed-step sampling yields lower error for the VLA, and event-level sampling yields lower error for the WAM.</figcaption>
 </figure>
- <div class="finding"><h4>Conclusion</h4><p>Clips that contain a complete action and captions that describe it in detail reduce wrist error on both holdouts. The mixed-source condition also outperforms the EgoDex comparison, although the paper notes that robot supervision contributes to this comparison. <strong>Fixed-step sampling works better for the VLA, and event-level sampling works better for the WAM.</strong></p></div>
+ <div class="finding"><h4>Conclusion</h4><p>Clips that contain a complete action and captions that describe it in detail reduce wrist error on both holdouts. The mixed-source condition also outperforms the EgoDex comparison, indicating data diversity matters in effective pretraining. <strong>Fixed-step sampling works better for the VLA, and event-level sampling works better for the WAM.</strong></p></div>
  </article>
 <article id="action-components" class="experiment">
  <h3>Which robot motions benefit most from more human data?</h3>
@@ -106,7 +106,7 @@
   </a>
   <figcaption><b>Figure 8.</b> How do VLA and WAM visual features change with scale? As egocentric data scale, relative separation R between human and robot features decreases in both robot domains for the VLA but shows no consistent decrease across the WAM layers examined. We hypothesize that human and robot features align more closely in our VLA because it only needs to output actions in a shared action space. Our WAM must also predict future video, which may encourage it to retain visual differences between human and robot hands.</figcaption>
 </figure>
- <div class="finding"><h4>Conclusion</h4><p>Human and robot features draw closer in the <strong>final VLA layer</strong> on both robot datasets. The four WAM layers show no consistent decrease. One possible explanation is that predicting future frames rewards the WAM for retaining differences in how human and robot hands look.</p></div>
+ <div class="finding"><h4>Conclusion</h4><p>Human and robot features draw closer in the final VLA layer on both robot datasets. <strong>Modeling actions alone encourages the VLA to learn more similar features from human and robot observations.</strong> The four WAM layers show no consistent decrease. One possible explanation is that predicting future frames rewards the WAM for retaining differences in how human and robot hands look.</p></div>
  </article>
 <article id="backbones" class="experiment">
  <h3>How does backbone choice affect scaling gains?</h3>
@@ -117,7 +117,7 @@
   </a>
   <figcaption><b>Figure 9.</b> How does backbone choice affect scaling gains between VLA and WAM? The wrist translation error decreases to the same extent across different VLAs, indicating that the 4B backbone is already capable of effectively extracting features shared between the egocentric and robot data. When the backbone of WAM is changed to 5B, its human-to-robot capability declines indicating that WAM relies more heavily on a powerful video backbone to assimilate egocentric data.</figcaption>
 </figure>
- <div class="finding"><h4>Conclusion</h4><p>The <strong>4B and 8B Qwen3-VL backbones</strong> gain similarly from more human data. The Wan2.1 14B WAM gains more than the Wan2.2 5B variant. In these configurations, transfer is more sensitive to the choice of video backbone.</p></div>
+ <div class="finding"><h4>Conclusion</h4><p>The 4B and 8B Qwen3-VL backbones gain similarly from more human data. The Wan2.1 14B WAM gains more than the Wan2.2 5B variant. <strong>A small VLA backbone can learn effectively from egocentric video, while human-to-robot transfer in the WAM depends more heavily on a strong video backbone.</strong></p></div>
  </article></div></div>
 </div></section>
 <section class="results section" id="results"><div class="reading"><h2>Results</h2>
