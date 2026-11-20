@@ -36,8 +36,11 @@ h3 { font-weight: 650; }
 .project-name { font-size: clamp(58px, 7vw, 94px); color: var(--accent); letter-spacing: -.075em; line-height: 1; font-weight: 730; }
 .paper-title { max-width: 880px; margin: 17px auto 0; text-wrap: balance; font-weight: 600; font-size: clamp(26px, 3.15vw, 45px); line-height: 1.16; }
 .authors { margin-top: 22px; font-size: 18px; }
-.author-row, .affiliations, .contributions { display: flex; justify-content: center; flex-wrap: wrap; gap: 2px 18px; }
-.author-row + .author-row { margin-top: 2px; }
+.authors, .affiliations, .contributions { display: flex; justify-content: center; flex-wrap: wrap; gap: 2px 18px; }
+.authors > span { white-space: nowrap; }
+@media (min-width: 801px) {
+  .authors { display: grid; grid-template-columns: repeat(5, max-content); }
+}
 .affiliations { margin-top: 12px; font-size: 15px; color: var(--secondary); }
 .contributions { margin-top: 4px; font-size: 13px; color: var(--secondary); }
 .hero sup { font-size: .7em; line-height: 0; color: var(--accent); }
