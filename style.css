@@ -47,8 +47,7 @@ h3 { font-weight: 650; }
 .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
 .button { min-height: 41px; padding: 7px 17px; border-radius: 24px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font: 600 14px/1.3 var(--sans); text-decoration: none; background: var(--ink); color: #fff; border: 1px solid var(--ink); }
 a.button:hover { background: var(--accent); border-color: var(--accent); }
-.pending { color: var(--secondary); background: #f7f6fa; border-color: var(--line); opacity: 1; cursor: default; }
-.status { font-size: 12px; font-weight: 450; border-left: 1px solid #cbc9d6; padding-left: 8px; }
+.play-icon { width: 0; height: 0; border-block: 6px solid transparent; border-left: 10px solid currentColor; }
 .code-icon { font: 600 15px/1 ui-monospace, monospace; }
 .document-icon { display: inline-block; width: 12px; height: 15px; border: 1.5px solid currentColor; border-radius: 2px; position: relative; }
 .document-icon::after { content: ""; position: absolute; left: 2px; right: 2px; bottom: 3px; height: 3px; border-block: 1px solid currentColor; }
