@@ -39,8 +39,18 @@
 <div class="actions">
   <a class="button" href="assets/EgoStudy.mp4" target="_blank" rel="noopener"><span class="play-icon" aria-hidden="true"></span>Video</a>
   <a class="button" href="assets/supplementary-material.pdf" target="_blank" rel="noopener"><span class="document-icon" aria-hidden="true"></span>Appendix</a>
-  <a class="button" href="https://github.com/PuzhenYuan/EgoStudy" target="_blank" rel="noopener"><span aria-hidden="true" class="code-icon">&lt;/&gt;</span>Code</a>
+  <button type="button" class="button" id="code-button" aria-controls="code-notice"><span aria-hidden="true" class="code-icon">&lt;/&gt;</span>Code</button>
 </div>
+<p class="code-notice" id="code-notice" role="status"></p>
+<script>
+  const codeNotice = document.getElementById('code-notice');
+  let noticeTimer;
+  document.getElementById('code-button').addEventListener('click', () => {
+    clearTimeout(noticeTimer);
+    codeNotice.textContent = 'The code will be released in one week.';
+    noticeTimer = setTimeout(() => { codeNotice.textContent = ''; }, 5000);
+  });
+</script>
 </div>
 <div class="teaser wrap"><figure class="plate plate-1">
   <a class="figure-link" href="assets/figures/overview.png" target="_blank" rel="noopener" aria-label="Open Figure 1 at full size">
