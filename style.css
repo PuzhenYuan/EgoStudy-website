@@ -63,7 +63,7 @@ figcaption b { color: var(--accent); }
 .section { padding-block: clamp(44px, 5.7vw, 82px); border-top: 1px solid var(--line); }
 .section h2 { margin-bottom: 24px; }
 .reading > p + p { margin-top: 15px; }
-.abstract { background: var(--pale); }
+.abstract, #citation { background: var(--pale); }
 .lede { max-width: 830px; font-size: clamp(18px, 1.7vw, 22px); line-height: 1.55; }
 .design-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(22px, 4vw, 60px); margin: 34px 0; }
 .design-grid > div { display: flex; flex-direction: column; }
@@ -74,7 +74,7 @@ figcaption b { color: var(--accent); }
 .design-grid img { height: 100%; object-fit: contain; }
 .design-grid figcaption { min-height: 80px; }
 .protocol { border-left: 3px solid #a79acb; padding-left: 19px; max-width: 905px; }
-.experiments { background: #faf9fc; }
+.experiments, #citation pre { background: #faf9fc; }
 .experiment-layout { display: grid; grid-template-columns: 183px minmax(0,1fr); gap: clamp(22px, 4vw, 62px); align-items: start; }
 .experiments h2 { margin-bottom: 36px; }
 .toc { position: sticky; top: 86px; display: grid; border-top: 1px solid var(--line); }
@@ -95,8 +95,7 @@ th:first-child { text-align: left; }
 thead { background: var(--pale); font-size: 14px; }
 tbody td:last-child { font-weight: 650; color: var(--accent); }
 .note { color: var(--secondary); margin: 8px 0 22px; font-size: 13px; }
-#citation { background: #e6ddfa; }
-#citation pre { padding: 18px; border: 1px solid #bcaae2; border-radius: 8px; background: #d9ccf2; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.6; }
+#citation pre { padding: 18px; border: 1px solid var(--line); border-radius: 8px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.6; }
 footer { display: flex; align-items: center; justify-content: space-between; padding-block: 23px; border-top: 1px solid var(--line); font-size: 14px; font-weight: 650; }
 @media(max-width: 800px) {
   .experiment-layout { grid-template-columns: minmax(0,1fr); gap: 28px; }
