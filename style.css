@@ -95,6 +95,7 @@ th:first-child { text-align: left; }
 thead { background: var(--pale); font-size: 14px; }
 tbody td:last-child { font-weight: 650; color: var(--accent); }
 .note { color: var(--secondary); margin: 8px 0 22px; font-size: 13px; }
+#citation pre { padding: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--pale); white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.6; }
 footer { display: flex; align-items: center; justify-content: space-between; padding-block: 23px; border-top: 1px solid var(--line); font-size: 14px; font-weight: 650; }
 @media(max-width: 800px) {
   .experiment-layout { grid-template-columns: minmax(0,1fr); gap: 28px; }
